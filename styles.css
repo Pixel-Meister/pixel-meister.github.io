@@ -3,8 +3,12 @@ h1 {
 	font-family: 'Orbitron', sans-serif;
 	font-size: 48px
 }
+h2 {
+	text-align: center;
+}
 
 body {
 	font-family: 'Inconsolata', serif
 	background: black;
+	display:block;
 }

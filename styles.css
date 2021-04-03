@@ -8,7 +8,8 @@ h2 {
 }
 
 body {
-	font-family: 'Inconsolata', serif
-	background: black;
+	font-family: 'Inconsolata', serif;
+	color: aliceblue;
+	background-color: black;
 	display:block;
 }

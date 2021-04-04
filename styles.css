@@ -11,5 +11,16 @@ body {
 	font-family: 'Inconsolata', serif;
 	color: aliceblue;
 	background-color: black;
-	display:block;
+}
+
+article {
+	padding-left: 20px;
+	padding-right: 20px;
+	background-color: black;
+}
+
+canvas {
+	padding: 0%;
+	margin: auto;
+	display: block;
 }

@@ -8,35 +8,92 @@
 <h1>World 1-1</h1>
 <article>
 	<h2>Bouncing Ball</h2>
-	<p>To kick things off, I'd like to start with a bouncing ball. It demonstrates some entry-level coding concepts like variables, modifying them, and funtions.</p>
+	<p>To kick things off, I'd like to start with a bouncing ball. I'm just journaling my thought process for solving this problem.</p>
 	<p>I'm using p5.js to handle animation; however, I think as long as concepts are there you can apply this to whatever language and library you choose.</p>
 	<p>First, let's set up the scene. We draw an ellipse on the screen.</p>
 	<p>In p5, there are two main functions. There's setup, which is code that runs continuosly. You can specify otherwise, like having a loop or having draw only run once.</p>
 	<p>Looking at the <a href="https://p5js.org/reference/">p5.js</a> reference for 2D objects we can see that the ellipse command sounds perfect. It has x and y coordinates and height and width arguments.</p>
 	<p>Sweet, so in our setup function we can set our canvas to the default 400x400 and we'll use the ellipse function in the draw funtion to create our circle.</p>
 	<div id="ballSketch1"></div>
-	<p>Next, we'll try moving it. Since draw runs multiple times, we can change the X or Y positions each time draw is run.</p>
+	<p>Next, we'll try moving it. Since draw runs multiple times, we can change the X or Y positions each time draw is run. In this case, we're just adding 1 to the ellipse's x and y coordinates each time draw is called.</p>
 	<div id="ballSketch2"></div>
+	<p>Cool! So we have understand that we can draw an ellipse and adjust its position. To have the ball bounce though, we need to change the direction if it reaches the edge of the screen.</p>
+	<p>Let's check if our ball position has reached either the furthest edge or the closest edge. We can check our canvas's size and if we're larger than the max value we reverse our direction.</p>
+	<div id="ballSketch3"></div>
 </article>
 <script>
-	const instance = (p) => {
-		let canvasX = 400;
-		let canvasY = 400;
-		let xPos = canvasX/2;
-		let yPos = canvasY/2;
+	const instance1 = (p) => {
+		let canvasX = 400
+		let canvasY = 400
+		let xPos = canvasX/2
+		let yPos = canvasY/2
 		p.setup = function(){
-			p.background(51);
 			p.createCanvas(canvasX,canvasY);
 		}
 		p.draw = function() {
-			//p.background = 0
+			p.background(255,255,255);
 			p.noFill();
 			p.fill(255);
-			p.ellipse(xPos/2,yPos/2,10,10)
+			p.ellipse(xPos,yPos,10,10)
 		}
 	}
-	let p5One = new p5(instance, "ballSketch1");
-	let p5Two = new p5(instance,"ballSketch2");
+	const instance2 = (p) => {
+		let canvasX = 400
+		let canvasY = 400
+		let xPos = 0;
+		let yPos = 0;
+		p.setup = function(){
+			p.createCanvas(canvasX,canvasY);
+		}
+		p.draw = function() {
+			xVelocity = 1;
+			yVelocity = 1;
+			p.background(255,255,255);
+			p.noFill();
+			p.fill(255);
+			p.ellipse(xPos,yPos,10,10)
+			xPos += xVelocity;
+			yPos += yVelocity;
+			if(xPos > canvasX || yPos > canvasX) {
+				xPos = 0;
+				yPos = 0;
+			}
+		}
+	}
+	const instance3 = (p) => {
+		xVelocity = 1;
+		yVelocity = 1;
+		let canvasX = 400
+		let canvasY = 400
+		let xPos = 0;
+		let yPos = 0;
+		let width = 10;
+		let height = 10;
+		
+		p.setup = function(){
+			p.createCanvas(canvasX,canvasY);
+		}
+		p.draw = function() {
+			p.background(255,255,255);
+			p.noFill();
+			p.fill(255);
+			let ball = p.ellipse(xPos,yPos,width,height);
+			if(xPos == canvasX) {
+				xVelocity = -1;
+				xPos += xVelocity;
+				console.log(xVelocity, xPos)
+			}
+			xPos += xVelocity;
+		}
+		console.log(xVelocity);
+		p.mousePressed = function() {
+			xPos = canvasX - 50;
+		}
+	}
+	let p5One = new p5(instance1, "ballSketch1");
+	let p5Two = new p5(instance2,"ballSketch2");
+	let p5Three = new p5(instance3,"ballSketch3");
+
 </script>
 </body>
 </html>

@@ -10,8 +10,55 @@
 	<h2>Spreading Colors</h2>
 	<p>Ah, early 2020. While it was a good time, it predated awesome animations like <a href="https://www.washingtonpost.com/graphics/2020/world/corona-simulator/">this one</a> by the Washington Post that used Javascript animations to demonstrate how diseases are slowed.</p>
 	<p>What I'd particularly like to focus on is the little bouncing dot animation where they have a crowd of circles bumping into each other spreading different colors and changing.</p>
+	<p>My first thought is "Someone has probably done something like this before," so let's look to the wisdom of programmers before. Referring to <a href="https://p5js.org/examples/simulate-particles.html">Sagar Aurora's imlementation of a particle system in p5</a>, we can see that an easy way to start is to have a class hold our dot's information and we can create an array to contain however many of those dots we would like. Then when we draw we can just loop through that array and draw each of those elements.</p>
+	<div id="spreadingColors1"></div>
 </article>
 <script>
+	function spreadingColors1() {
+		class dot {
+		constructor() {
+			this.x = random(0, width);
+			this.y = random(0, height);
+			this.diameter = random(0, .02 * width);
+			}
+		}
+		this.dotArray = [];
+		this.setup = function() {
+			for(let i = 0; i < 20; i++) {
+				createCanvas(400,400);
+				dotArray.push(new dot);
+			}
+			this.draw = function() {
+			dotArray.forEach(
+				(currentDot) => {
+				circle(currentDot.x,currentDot.y,currentDot.diameter)}
+				)}
+	}
+	}
+	function spreadingColors2() {
+		class dot {
+		constructor() {
+			this.x = random(0, width);
+			this.y = random(0, height);
+			this.diameter = random(0, .02 * width);
+			}
+		}
+		this.dotArray = [];
+		this.setup = function() {
+			for(let i = 0; i < 20; i++) {
+				createCanvas(400,400);
+				dotArray.push(new dot);
+			}
+			this.draw = function() {
+			dotArray.forEach(
+				(currentDot) => {
+				circle(currentDot.x,currentDot.y,currentDot.diameter)}
+				)}
+	}
+	}
+new p5(spreadingColors1, "spreadingColors1");
+new p5(spreadingColors2,"spreadingColors2");
+
 </script>
 </body>
 </html>

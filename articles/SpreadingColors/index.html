@@ -12,52 +12,156 @@
 	<p>What I'd particularly like to focus on is the little bouncing dot animation where they have a crowd of circles bumping into each other spreading different colors and changing.</p>
 	<p>My first thought is "Someone has probably done something like this before," so let's look to the wisdom of programmers before. Referring to <a href="https://p5js.org/examples/simulate-particles.html">Sagar Aurora's imlementation of a particle system in p5</a>, we can see that an easy way to start is to have a class hold our dot's information and we can create an array to contain however many of those dots we would like. Then when we draw we can just loop through that array and draw each of those elements.</p>
 	<div id="spreadingColors1"></div>
+	<p>Next let's move them.</p>
+	<div id="spreadingColors2"></div>
+	<p>Oops, forgot. When we're drawing this canvas we were just drawing a sequence of dots. We want motion so we need to paint the background every frame too.</p>
+	<div id="spreadingColors3"></div>
+	<p>Better! Although that first one looks neat too. Let's check if we're at the boundry and we'll reverse our direction if that's the case.</p>
+	<div id="spreadingColors4"></div>
+	<p>Neat, we're getting closer. We're only calculating for a few dots so let's just check every dot and see if it's touching the other dots. If they are, we'll reverse direction.</p>
+	<div id="spreadingColors4"></div>
 </article>
 <script>
-	function spreadingColors1() {
-		class dot {
-		constructor() {
-			this.x = random(0, width);
-			this.y = random(0, height);
-			this.diameter = random(0, .02 * width);
+	class dot {
+		constructor(x,y,diameter,xVelocity = 1, yVelocity = 1) {
+			this.x = x;
+			this.y = y;
+			this.diameter = diameter;
+			this.xVelocity = xVelocity;
+			this.yVelocity = yVelocity;
+			}
+			move() {
+				this.x += this.xVelocity;
+				this.y += this.yVelocity;
 			}
 		}
-		this.dotArray = [];
-		this.setup = function() {
+	const spreadingColors1 = (p) => {
+		let dotArray = [];
+		p.setup = function() {
+			p.createCanvas(400,400);
 			for(let i = 0; i < 20; i++) {
-				createCanvas(400,400);
-				dotArray.push(new dot);
+				dotArray.push(new dot(p.random(0,p.width),p.random(0,p.height),5));
 			}
-			this.draw = function() {
+			p.draw = function() {
 			dotArray.forEach(
 				(currentDot) => {
-				circle(currentDot.x,currentDot.y,currentDot.diameter)}
-				)}
-	}
-	}
-	function spreadingColors2() {
-		class dot {
-		constructor() {
-			this.x = random(0, width);
-			this.y = random(0, height);
-			this.diameter = random(0, .02 * width);
+				p.circle(currentDot.x,currentDot.y,currentDot.diameter)
+					}
+				)
 			}
 		}
-		this.dotArray = [];
-		this.setup = function() {
+	}
+	function spreadingColors2 (p) {
+		let dotArray = [];
+		p.setup = function() {
+			p.createCanvas(400,400);
 			for(let i = 0; i < 20; i++) {
-				createCanvas(400,400);
-				dotArray.push(new dot);
+				dotArray.push(new dot(p.random(0,p.width),p.random(0,p.height),5));
 			}
-			this.draw = function() {
-			dotArray.forEach(
-				(currentDot) => {
-				circle(currentDot.x,currentDot.y,currentDot.diameter)}
-				)}
+			p.draw = function() {
+				dotArray.forEach(
+					(currentDot, dotIndex) => {
+						p.circle(currentDot.x,currentDot.y,currentDot.diameter);
+						currentDot.move();
+						if(currentDot.x > p.width) {
+							dotArray.splice(dotIndex,1);
+
+						}
+					}
+				)
+				if(dotArray.length == 0) {
+					p.noLoop();
+				}
+			}
+		}
 	}
+	function spreadingColors3 (p) {
+		let dotArray = [];
+		p.setup = function() {
+			p.createCanvas(400,400);
+			for(let i = 0; i < 20; i++) {
+				dotArray.push(new dot(p.random(0,p.width),p.random(0,p.height),5));
+			}
+			p.draw = function() {
+				p.background(0);
+				dotArray.forEach(
+					(currentDot, dotIndex) => {
+						p.circle(currentDot.x,currentDot.y,currentDot.diameter);
+						currentDot.move();
+						if(currentDot.x > p.width) {
+							dotArray.splice(dotIndex,1);
+						}
+					}
+				)
+				if(dotArray.length == 0) {
+					p.noLoop();
+				}
+			}
+		}
 	}
-new p5(spreadingColors1, "spreadingColors1");
-new p5(spreadingColors2,"spreadingColors2");
+	function spreadingColors4 (p) {
+		let dotArray = [];
+		p.setup = function() {
+			p.createCanvas(400,400);
+			for(let i = 0; i < 20; i++) {
+				dotArray.push(new dot(p.random(0,p.width),p.random(0,p.height),5));
+			}
+			p.draw = function() {
+				p.background(0);
+				dotArray.forEach(
+					(currentDot, dotIndex) => {
+						p.circle(currentDot.x,currentDot.y,currentDot.diameter);
+						if(currentDot.x + currentDot.diameter / 2 >= p.width || currentDot.x - currentDot.diameter / 2 <= 0) {
+							currentDot.xVelocity *= -1;
+						}
+						if(currentDot.y + currentDot.diameter / 2 >= p.height || currentDot.y - currentDot.diameter / 2 <= 0) {
+							currentDot.yVelocity *= -1;
+						}
+						currentDot.move();
+						if(currentDot.x > p.width) {
+							dotArray.splice(dotIndex,1);
+						}
+					}
+				)
+				if(dotArray.length == 0) {
+					p.noLoop();
+				}
+			}
+		}
+	}
+	function spreadingColors5 (p) {
+		let dotArray = [];
+		p.setup = function() {
+			p.createCanvas(400,400);
+			for(let i = 0; i < 20; i++) {
+				dotArray.push(new dot(p.random(0,p.width),p.random(0,p.height),5));
+			}
+			p.draw = function() {
+				p.background(0);
+				const xVals = dotArray.map(dotX => dotX.x).sort((a, b) => a-b);
+				const yVals = dotArray.map(dotY => dotY.y).sort((a, b) => a-b);
+				dotArray.forEach(
+					(currentDot, dotIndex) => {
+						p.circle(currentDot.x,currentDot.y,currentDot.diameter);
+						if(currentDot.x + currentDot.diameter / 2 >= p.width ||
+						 currentDot.x - currentDot.diameter / 2 <= 0) {
+							currentDot.xVelocity *= -1;
+						}
+						if(currentDot.y + currentDot.diameter / 2 >= p.height || currentDot.y - currentDot.diameter / 2 <= 0) {
+							currentDot.yVelocity *= -1;
+						}
+						currentDot.move();
+					}
+				)
+				}
+			}
+		}
+let p5_1 = new p5(spreadingColors1, "spreadingColors1");
+let p5_2 = new p5(spreadingColors2,"spreadingColors2");
+let p5_3 = new p5(spreadingColors3,"spreadingColors3");
+let p5_4 = new p5(spreadingColors4,"spreadingColors4");
+let p5_5 = new p5(spreadingColors5,"spreadingColors5");
+
 
 </script>
 </body>

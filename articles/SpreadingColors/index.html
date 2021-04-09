@@ -27,14 +27,30 @@
 			this.x = x;
 			this.y = y;
 			this.diameter = diameter;
+			this.radius = this.diameter / 2;
 			this.xVelocity = xVelocity;
 			this.yVelocity = yVelocity;
 			}
 			move() {
 				this.x += this.xVelocity;
 				this.y += this.yVelocity;
+				this.currentlyColliding = false;
+				
 			}
-		}
+			colliding(canvasWidth, canvasHeight, otherDots) {
+				if(this.x - this.radius < 0   || this.x + this.radius > canvasWidth ) {
+					this.xVelocity *= -1;
+				}
+				if(this.y - this.radius < 0 || this.y + this.radius > canvasHeight) {
+					this.yVelocity *= -1;
+				}
+				otherDots.forEach(otherDot => {
+					if(otherDot !== this && Math.sqrt((this.x - otherDot.x)^2 + (this.y - otherDot.y)^2) > (this.diameter + otherDot.diameter) / 2) {
+						this.currentlyColliding = true;
+					}	
+				})
+			}
+	}
 	const spreadingColors1 = (p) => {
 		let dotArray = [];
 		p.setup = function() {
@@ -134,22 +150,13 @@
 		p.setup = function() {
 			p.createCanvas(400,400);
 			for(let i = 0; i < 20; i++) {
-				dotArray.push(new dot(p.random(0,p.width),p.random(0,p.height),5));
+				dotArray.push(new dot(p.random(15,p.width - 15),p.random(15,p.height - 15),15));
 			}
 			p.draw = function() {
 				p.background(0);
-				const xVals = dotArray.map(dotX => dotX.x).sort((a, b) => a-b);
-				const yVals = dotArray.map(dotY => dotY.y).sort((a, b) => a-b);
-				dotArray.forEach(
-					(currentDot, dotIndex) => {
+				dotArray.forEach(currentDot => {
 						p.circle(currentDot.x,currentDot.y,currentDot.diameter);
-						if(currentDot.x + currentDot.diameter / 2 >= p.width ||
-						 currentDot.x - currentDot.diameter / 2 <= 0) {
-							currentDot.xVelocity *= -1;
-						}
-						if(currentDot.y + currentDot.diameter / 2 >= p.height || currentDot.y - currentDot.diameter / 2 <= 0) {
-							currentDot.yVelocity *= -1;
-						}
+						currentDot.colliding(p.width, p.height);
 						currentDot.move();
 					}
 				)

@@ -44,11 +44,11 @@
 				if(this.y - this.radius < 0 || this.y + this.radius > canvasHeight) {
 					this.yVelocity *= -1;
 				}
-				otherDots.forEach(otherDot => {
+				/*otherDots.forEach(otherDot => {
 					if(otherDot !== this && Math.sqrt((this.x - otherDot.x)^2 + (this.y - otherDot.y)^2) > (this.diameter + otherDot.diameter) / 2) {
 						this.currentlyColliding = true;
 					}	
-				})
+				})*/
 			}
 	}
 	const spreadingColors1 = (p) => {
@@ -150,7 +150,7 @@
 		p.setup = function() {
 			p.createCanvas(400,400);
 			for(let i = 0; i < 20; i++) {
-				dotArray.push(new dot(p.random(15,p.width - 15),p.random(15,p.height - 15),15));
+				dotArray.push(new dot(p.random(15, p.width - 15), p.random(15,p.height - 15), 15, p.random(0,1), p.random(0,1)));
 			}
 			p.draw = function() {
 				p.background(0);

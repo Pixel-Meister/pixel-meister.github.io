@@ -22,6 +22,9 @@
 	<div id="spreadingColors4"></div>
 </article>
 <script>
+	function distance(objOne, objTwo) {
+		return Math.sqrt((objOne.x - objTwo.x)**2 + (objOne.y - objTwo.y)**2);
+	} 
 	class dot {
 		constructor(x,y,diameter,xVelocity = 1, yVelocity = 1) {
 			this.x = x;
@@ -40,15 +43,20 @@
 			colliding(canvasWidth, canvasHeight, otherDots) {
 				if(this.x - this.radius < 0   || this.x + this.radius > canvasWidth ) {
 					this.xVelocity *= -1;
+					return;
 				}
 				if(this.y - this.radius < 0 || this.y + this.radius > canvasHeight) {
 					this.yVelocity *= -1;
+					return;
 				}
-				/*otherDots.forEach(otherDot => {
-					if(otherDot !== this && Math.sqrt((this.x - otherDot.x)^2 + (this.y - otherDot.y)^2) > (this.diameter + otherDot.diameter) / 2) {
-						this.currentlyColliding = true;
+				for(let i = 0; i < otherDots.length; i++) {
+					let minDistance = this.diameter / 2 + otherDots[i].diameter / 2;
+					if(otherDots[i] != this && distance(this,otherDots[i]) <= minDistance) {
+						this.xVelocity *= -1;
+						this.yVelocity *= -1;
+						return;
 					}	
-				})*/
+				};
 			}
 	}
 	const spreadingColors1 = (p) => {
@@ -148,15 +156,15 @@
 	function spreadingColors5 (p) {
 		let dotArray = [];
 		p.setup = function() {
-			p.createCanvas(400,400);
-			for(let i = 0; i < 20; i++) {
-				dotArray.push(new dot(p.random(15, p.width - 15), p.random(15,p.height - 15), 15, p.random(0,1), p.random(0,1)));
+			p.createCanvas(100,100);
+			for(let i = 0; i < 2; i++) {
+				dotArray.push(new dot(p.random(15, p.width - 15), p.random(15,p.height - 15), 15, p.random(0.5,1), p.random(0.5,1)));
 			}
 			p.draw = function() {
 				p.background(0);
 				dotArray.forEach(currentDot => {
 						p.circle(currentDot.x,currentDot.y,currentDot.diameter);
-						currentDot.colliding(p.width, p.height);
+						currentDot.colliding(p.width, p.height, dotArray);
 						currentDot.move();
 					}
 				)

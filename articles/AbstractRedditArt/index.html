@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="../../styles.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Orbitron|Inconsolata">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.2.0/p5.js"></script>
+<body>
+<h1>World 1-1</h1>
+<article>
+	<h2>Abstract Reddit Art</h2>
+	<p>I saw a neat <a href="https://i.redd.it/br5zlhiew7i71.jpg">abstract art piece</a> on Reddit and I thought it would be interesting to see it animated. I think there's tweaking to do with the spacing and timing of the strips and the perspective seems off but it's still fun!</p>
+	<div id="abstractArt"></div>
+</article>
+<script>
+//Inspired by a reddit post:
+//i.redd.it/br5zlhiew7i71.jpg
+
+function setup() {
+  createCanvas(400,400);
+  frameRate(60);
+  for(let i = 0; i < numRoads; i++) {
+    roadArray.push(new blueRect(width / 2 + width / 2 / numRoads * i));
+  }
+}
+//What % of the screen width to make the road
+let numRoads = 10;
+let roadWidth = 1;
+let roadArray = [];
+let background_shade = (247,243,233);
+
+function draw() {
+  background(background_shade);
+  noStroke();
+  fill(255,40,15);
+  ellipse(width / 2,height / 3,width / 2,height / 2);
+  fill(background_shade);
+  rect(0,height / 2,width, height / 2);
+  stroke(255,70,35)
+  line(width - .9 * width, height / 2, width * .9, height / 2);
+  roadArray.forEach(road => {
+    road.draw();
+    road.y += 1;
+    if(road.y >= height) {
+      road.y = height / 2
+    }
+  }
+                   )
+  //noLoop();
+}
+
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  width = windowWidth;
+  height = windowHeight;
+}
+
+
+class blueRect {
+  constructor(y) {
+    this.y = y;
+    
+
+  }
+  draw(){
+    this.x1 = width - mapper(this.y);
+    this.x2 = mapper(this.y);
+    this.y3 = this.y * map(this.y, height / 2, height,1,1.02);
+    this.x3 = mapper(this.y3);
+    fill(64,0,255);
+    noStroke();
+    triangle(this.x1, this.y, this.x2, this.y, this.x3, this.y3);
+    triangle(this.x1, this.y, width - this.x3, this.y3, this.x3, this.y3);
+    
+    fill(0);
+    //text(`Point 1: ${this.x1}, ${this.y1}`,this.x1,this.y1);
+    //text(`Point 2: ${this.x2}, ${this.y2}`,this.x2,this.y2);
+    //text(`Point 3: ${this.x3}, ${this.y3}`,this.x3,this.x3);
+    //text(`Point 1: ${this.x1}, ${this.y1}`, 50,50)
+  }
+}
+
+function mapper(yVal) {
+  return map(yVal, height / 2, height, width / 2, width * map(roadWidth,0,1,0.5,1));
+}
+</script>
+</body>
+</html>
